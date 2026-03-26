@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Thunder - พัสดุของฉัน</title>
+</head>
+<body>
+    <nav>
+        <h2 style="margin:0;">⚡ THUNDER</h2>
+        <div>
+            <a href="dashboard.html" style="text-decoration:none; font-weight:bold; color:#333;">พัสดุของฉัน</a> | 
+            <a href="tracking.html" style="text-decoration:none; color:#333;">ติดตามพัสดุ</a> | 
+            <a href="services.html" style="text-decoration:none; color:#333;">รับ/เคลมพัสดุ</a> |
+            <a href="calculator.html" style="text-decoration:none; color:#333;">คำนวณค่าส่ง</a>
+            <a href="index.html" style="color:red; margin-left:15px;">ออกจากระบบ</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h3>➕ เพิ่มพัสดุใหม่</h3>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="pName" placeholder="ชื่อพัสดุ">
+            <button onclick="addParcel()">เพิ่ม</button>
+        </div>
+        
+        <hr style="margin: 20px 0; border: 0.5px solid #eee;">
+        
+        <h3>📦 รายการพัสดุของฉัน</h3>
+        <ul id="list" style="list-style: none; padding: 0;">
+            <li style="padding: 10px; border-bottom: 1px solid #eee;">📦 #TH-9901 | สมาร์ทโฟน (กำลังจัดส่ง)</li>
+        </ul>
+    </div>
+
+    <script>
+        function addParcel() {
+            const val = document.getElementById('pName').value;
+            if(val) {
+                const li = document.createElement('li');
+                li.style.padding = "10px";
+                li.style.borderBottom = "1px solid #eee";
+                li.innerHTML = `📦 #TH-NEW | ${val} (รอดำเนินการ)`;
+                document.getElementById('list').appendChild(li);
+                document.getElementById('pName').value = "";
+            }
+        }
+    </script>
+</body>
+</html>
