@@ -57,43 +57,62 @@
     <div id="toast-wrapper" class="toast-container"></div>
 
     <script>
+        /**
+         * ฟังก์ชันหลักสำหรับการส่งข้อมูลเคลม
+         */
         function submitClaim() {
+            // ดึงค่าจาก Input fields
             const track = document.getElementById('claimTrack').value;
             const detail = document.getElementById('claimDetail').value;
 
-            // ตรวจสอบความว่างเปล่า (HCI: Error Prevention)
+            // --- หลักการ HCI: Error Prevention (การป้องกันข้อผิดพลาด) ---
+            // ตรวจสอบว่าผู้ใช้กรอกข้อมูลครบถ้วนหรือไม่ก่อนที่จะประมวลผลต่อ
             if (!track || !detail) {
                 showToast('กรุณากรอกข้อมูลให้ครบถ้วนก่อนส่ง', 'error');
                 return;
             }
 
-            // จำลองการบันทึกข้อมูล
+            // --- การจัดการข้อมูล (Simulation) ---
+            // บันทึกสถานะไว้ใน LocalStorage เพื่อจำลองการส่งข้อมูลไปยัง Server
             localStorage.setItem('lastClaimTrack', track);
             localStorage.setItem('claimStatus', 'Pending');
 
-            // แสดง Feedback ทันที
+            // --- หลักการ HCI: Feedback (การตอบสนองทันที) ---
+            // แจ้งให้ผู้ใช้ทราบว่าระบบได้รับข้อมูลแล้วผ่าน Toast notification
             showToast('ส่งคำขอเคลมสำเร็จ! เจ้าหน้าที่จะตรวจสอบโดยเร็ว', 'success');
 
-            // แสดงสถานะในหน้าปัจจุบัน (HCI: Visibility of System Status)
+            // --- หลักการ HCI: Visibility of System Status (การแสดงสถานะระบบ) ---
+            // 1. ล้างข้อมูลในฟอร์มออก
             document.getElementById('claimForm').reset();
+            // 2. แสดง Card สถานะการเคลมที่ด้านล่าง เพื่อยืนยันว่ารายการกำลังถูกดำเนินการ
             document.getElementById('claimStatusCard').style.display = 'block';
             document.getElementById('displayClaimID').innerText = "หมายเลขเคลมสำหรับพัสดุ: " + track;
 
-            // หน่วงเวลาเล็กน้อยก่อนกลับหน้าหลัก (หรือจะให้ผู้ใช้อยู่หน้านี้เพื่อดูสถานะก็ได้)
+            // หน่วงเวลา 3 วินาทีเพื่อให้ผู้ใช้ได้อ่านสถานะ ก่อนจะ Redirect กลับหน้าหลักอัตโนมัติ
             setTimeout(() => {
                 location.href = 'dashboard.html?status=claimed';
             }, 3000);
         }
 
+        /**
+         * ฟังก์ชันสำหรับสร้างและแสดงการแจ้งเตือน (Toast)
+         * @param {string} message - ข้อความที่ต้องการแสดง
+         * @param {string} type - 'success' หรือ 'error' เพื่อกำหนดสีและไอคอน
+         */
         function showToast(message, type) {
             const wrapper = document.getElementById('toast-wrapper');
             const toast = document.createElement('div');
             const icon = type === 'success' ? '✅' : '❌';
+            
+            // ตั้งค่า Class และ Style ตามประเภทของการแจ้งเตือน
             toast.className = `toast ${type}`;
             toast.style.borderLeft = type === 'success' ? '5px solid #00c851' : '5px solid #ff4444';
             toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+            
+            // เพิ่ม Toast เข้าไปใน Wrapper
             wrapper.appendChild(toast);
             
+            // ลบ Toast ออกอัตโนมัติหลังจากแสดงผลไปแล้ว 2.5 วินาที พร้อม Effect ค่อยๆ จางออก (Fade Out)
             setTimeout(() => {
                 toast.style.opacity = '0';
                 setTimeout(() => toast.remove(), 500);

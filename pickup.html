@@ -52,40 +52,55 @@
     <div id="toast-wrapper" class="toast-container"></div>
 
     <script>
+        /**
+         * ฟังก์ชันยืนยันการนัดรับพัสดุ
+         * ทำหน้าที่ตรวจสอบข้อมูลเบื้องต้นและบันทึกสถานะ
+         */
         function confirmPickup() {
             const address = document.getElementById('address').value;
             const time = document.getElementById('timeSlot').value;
 
+            // ตรวจสอบว่าผู้ใช้กรอกที่อยู่หรือยัง
             if (!address) {
                 showToast('กรุณาระบุที่อยู่สำหรับนัดรับ', 'error');
                 return;
             }
 
-            // บันทึกข้อมูลจำลอง
+            // จำลองการบันทึกข้อมูลลง LocalStorage เพื่อนำไปใช้ในหน้า Dashboard
             localStorage.setItem('lastPickupTime', time);
             localStorage.setItem('pickupStatus', 'Scheduled');
 
-            // แสดงสถานะแจ้งเตือน
+            // แสดงหน้าต่างแจ้งเตือนสำเร็จ
             showToast(`นัดรับสำเร็จ! เจ้าหน้าที่จะเข้าไปในช่วง ${time}`, 'success');
 
-            // ส่งค่ากลับไปหน้าหลักหลังจากแจ้งเตือน
+            // หน่วงเวลา 2.5 วินาทีเพื่อให้ผู้ใช้เห็นข้อความแจ้งเตือน ก่อนส่งกลับหน้าหลัก
             setTimeout(() => {
                 location.href = 'dashboard.html?status=pickup_set';
             }, 2500);
         }
 
+        /**
+         * ฟังก์ชันแสดงข้อความแจ้งเตือน (Toast)
+         * @param {string} message - ข้อความที่ต้องการแสดง
+         * @param {string} type - ประเภทการแจ้งเตือน ('success' หรือ 'error')
+         */
         function showToast(message, type) {
             const wrapper = document.getElementById('toast-wrapper');
             const toast = document.createElement('div');
             const icon = type === 'success' ? '✅' : '❌';
+            
+            // กำหนด Class และ Style ตามประเภทที่ส่งมา
             toast.className = `toast ${type}`;
             toast.style.borderLeft = type === 'success' ? '5px solid #00c851' : '5px solid #ff4444';
             toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+            
+            // เพิ่ม Toast เข้าไปใน Wrapper
             wrapper.appendChild(toast);
             
+            // ตั้งเวลาให้ Toast ค่อยๆ จางหายและลบทิ้งหลังจากแสดงผล
             setTimeout(() => {
                 toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 500);
+                setTimeout(() => toast.remove(), 500); // ลบ Element ออกจาก DOM
             }, 2500);
         }
     </script>
