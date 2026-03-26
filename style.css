@@ -1,49 +1,63 @@
+/* นำเข้าฟอนต์ Kanit จาก Google Fonts (น้ำหนัก 300, 400, 600) */
 @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap');
 
+/* กำหนดตัวแปร (Variables) สำหรับค่าสีและเงา เพื่อให้เรียกใช้ง่ายและแก้ไขได้ในจุดเดียว */
 :root {
-    --primary-yellow: #FFD700;
-    --dark-yellow: #FFCC00;
-    --bg-light: #FBFBFB;
-    --white: #ffffff;
-    --dark-text: #222;
-    --gray-text: #666;
-    --shadow: 0 10px 30px rgba(0,0,0,0.08);
+    --primary-yellow: #FFD700;   /* สีเหลืองหลัก */
+    --dark-yellow: #FFCC00;      /* สีเหลืองเข้ม */
+    --bg-light: #FBFBFB;         /* สีพื้นหลังสีเทาอ่อนเกือบขาว */
+    --white: #ffffff;            /* สีขาวบริสุทธิ์ */
+    --dark-text: #222;           /* สีข้อความหลัก (เกือบดำ) */
+    --gray-text: #666;           /* สีข้อความรอง (สีเทา) */
+    --shadow: 0 10px 30px rgba(0,0,0,0.08); /* รูปแบบเงามาตรฐาน */
 }
 
-* { box-sizing: border-box; transition: all 0.2s ease-in-out; }
+/* ตั้งค่าเริ่มต้น: ให้ทุก Element คำนวณขนาดรวม Padding/Border และเพิ่ม Animation ตอนเปลี่ยนค่า (Transition) */
+* { 
+    box-sizing: border-box; 
+    transition: all 0.2s ease-in-out; 
+}
 
 body {
-    font-family: 'Kanit', sans-serif;
+    font-family: 'Kanit', sans-serif; /* ใช้ฟอนต์ Kanit */
     background-color: var(--bg-light);
     color: var(--dark-text);
     margin: 0;
 }
 
-/* NAVIGATION */
+/* --- ส่วนแถบเมนูนำทาง (NAVIGATION) --- */
 nav {
     background-color: var(--primary-yellow);
     padding: 12px 5%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* จัดโลโก้ซ้าย ลิงก์ขวา */
     align-items: center;
-    position: sticky;
-    top: 0; z-index: 1000;
+    position: sticky;              /* ให้เมนูติดอยู่ด้านบนตลอดเวลาเมื่อเลื่อนจอ */
+    top: 0; 
+    z-index: 1000;                 /* ให้อยู่ชั้นบนสุด */
     box-shadow: 0 2px 15px rgba(0,0,0,0.1);
 }
 
-.logo-section h1 { margin: 0; font-size: 1.4rem; font-style: italic; cursor: pointer; }
+.logo-section h1 { 
+    margin: 0; 
+    font-size: 1.4rem; 
+    font-style: italic; 
+    cursor: pointer; 
+}
 
 .nav-links a {
-    text-decoration: none;
+    text-decoration: none;         /* เอาเส้นใต้ลิงก์ออก */
     color: var(--dark-text);
     margin-left: 20px;
     font-weight: 600;
     font-size: 0.9rem;
 }
 
-.nav-links a:hover { opacity: 0.7; }
+.nav-links a:hover { 
+    opacity: 0.7;                  /* เอฟเฟกต์จางลงเมื่อเอาเมาส์ไปชี้ */
+}
 
-/* HERO SEARCH */
+/* --- ส่วนหัวและการค้นหา (HERO SEARCH) --- */
 .hero {
     background: white;
     padding: 60px 20px;
@@ -54,23 +68,30 @@ nav {
 .search-box-container {
     max-width: 650px;
     margin: 0 auto;
-    display: flex;
+    display: flex;                 /* จัดเรียง input และปุ่มแบบแนวนอน */
     box-shadow: var(--shadow);
-    border-radius: 50px;
-    overflow: hidden;
+    border-radius: 50px;           /* ทำขอบโค้งมนแบบวงรี */
+    overflow: hidden;              /* ตัดส่วนที่เกินขอบโค้งออก */
     border: 1px solid #eee;
 }
 
 .search-box-container input {
-    flex: 1; border: none; padding: 18px 30px; outline: none; font-size: 1rem;
+    flex: 1;                       /* ให้ช่อง input ขยายเต็มพื้นที่ที่เหลือ */
+    border: none; 
+    padding: 18px 30px; 
+    outline: none; 
+    font-size: 1rem;
 }
 
 .btn-search {
     background: var(--primary-yellow);
-    border: none; padding: 0 35px; font-weight: bold; cursor: pointer;
+    border: none; 
+    padding: 0 35px; 
+    font-weight: bold; 
+    cursor: pointer;
 }
 
-/* GRID & CARDS */
+/* --- การจัดวางแบบตารางและบัตรข้อมูล (GRID & CARDS) --- */
 .content-section {
     max-width: 1100px;
     margin: 40px auto;
@@ -79,6 +100,7 @@ nav {
 
 .grid {
     display: grid;
+    /* จัดการ Column อัตโนมัติ: ขั้นต่ำ 280px ถ้าพื้นที่เหลือให้ขยายเท่า ๆ กัน */
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 25px;
 }
@@ -92,11 +114,18 @@ nav {
     border: 1px solid rgba(0,0,0,0.02);
 }
 
-.card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
+/* เอฟเฟกต์เมื่อวางเมาส์เหนือการ์ด: ให้ลอยขึ้นเล็กน้อยและเงาเข้มขึ้น */
+.card:hover { 
+    transform: translateY(-8px); 
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12); 
+}
 
-.card-icon { font-size: 45px; margin-bottom: 15px; }
+.card-icon { 
+    font-size: 45px; 
+    margin-bottom: 15px; 
+}
 
-/* BUTTONS */
+/* --- ปุ่มดำเนินการ (BUTTONS) --- */
 .btn-action {
     background-color: var(--primary-yellow);
     color: var(--dark-text);
@@ -106,19 +135,37 @@ nav {
     font-weight: 600;
     cursor: pointer;
     margin-top: 20px;
-    box-shadow: 0 4px 0 #e6c200;
+    box-shadow: 0 4px 0 #e6c200;   /* เพิ่มมิติเงาด้านล่างปุ่มให้ดูเหมือนปุ่มกด */
 }
 
-.btn-action:active { transform: translateY(2px); box-shadow: none; }
+/* เอฟเฟกต์เมื่อกดปุ่ม: ให้ยุบลงเหมือนโดนกดจริง */
+.btn-action:active { 
+    transform: translateY(2px); 
+    box-shadow: none; 
+}
 
-/* FORM ELEMENTS */
-.form-group { margin-bottom: 15px; text-align: left; }
-.form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+/* --- องค์ประกอบฟอร์ม (FORM ELEMENTS) --- */
+.form-group { 
+    margin-bottom: 15px; 
+    text-align: left; 
+}
+
+.form-group label { 
+    display: block; 
+    margin-bottom: 5px; 
+    font-weight: 600; 
+}
+
+/* จัดรูปแบบช่องกรอกข้อมูลและ Select ให้สวยงามและใช้งานง่าย */
 input[type="text"], input[type="number"], input[type="password"], select, textarea {
-    width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px; font-family: 'Kanit', sans-serif;
+    width: 100%; 
+    padding: 12px; 
+    border: 1px solid #ddd; 
+    border-radius: 12px; 
+    font-family: 'Kanit', sans-serif;
 }
 
-/* --- TOAST NOTIFICATION --- */
+/* --- ระบบแจ้งเตือน (TOAST NOTIFICATION) --- */
 .toast-container {
     position: fixed;
     bottom: 20px;
@@ -136,13 +183,91 @@ input[type="text"], input[type="number"], input[type="password"], select, textar
     display: flex;
     align-items: center;
     gap: 12px;
-    animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* เอฟเฟกต์เด้งเข้ามา */
 }
 
+/* อนิเมชั่นเลื่อนจากขวาเข้าสู่จอ */
 @keyframes slideIn {
     from { transform: translateX(110%); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
 }
 
+/* สีขอบด้านซ้ายเพื่อบอกสถานะ (สำเร็จ/ผิดพลาด) */
 .toast.success { border-left: 5px solid #00c851; }
 .toast.error { border-left: 5px solid #ff4444; }
+
+
+
+
+/* --- RESPONSIVE DESIGN --- */
+
+/* สำหรับ Tablet และมือถือขนาดใหญ่ (หน้าจอต่ำกว่า 768px) */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column; /* โลโก้อยู่บน เมนูอยู่ล่าง */
+        padding: 15px;
+        gap: 10px;
+    }
+
+    .nav-links {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .nav-links a {
+        margin: 0 10px;
+        font-size: 0.8rem;
+    }
+
+    .hero {
+        padding: 40px 15px;
+    }
+
+    .search-box-container {
+        flex-direction: column; /* ช่องค้นหากับปุ่มแยกบรรทัดกัน */
+        border-radius: 20px;
+        box-shadow: none;
+    }
+
+    .search-box-container input {
+        padding: 15px;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+    }
+
+    .btn-search {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr; /* ปรับเป็น 1 คอลัมน์ถ้วน */
+        gap: 15px;
+    }
+
+    .content-section {
+        margin: 20px auto;
+    }
+
+    .card {
+        padding: 25px 20px;
+    }
+}
+
+/* สำหรับมือถือขนาดเล็ก (หน้าจอต่ำกว่า 480px) */
+@media (max-width: 480px) {
+    .logo-section h1 {
+        font-size: 1.2rem;
+    }
+
+    .btn-action {
+        width: 100%; /* ปุ่มกว้างเต็มหน้าจอเพื่อให้กดง่ายด้วยนิ้วโป้ง */
+        padding: 15px;
+    }
+
+    input, select, textarea {
+        font-size: 16px; /* ป้องกัน iOS ซูมหน้าจอเวลาพิมพ์ */
+    }
+}

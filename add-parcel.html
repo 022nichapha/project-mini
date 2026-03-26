@@ -52,41 +52,55 @@
     <div id="toast-wrapper" class="toast-container"></div>
 
     <script>
+        /**
+         * ฟังก์ชันหลักเมื่อกดปุ่มยืนยัน
+         * เน้นหลัก HCI: Error Prevention (ดักข้อผิดพลาดก่อนส่ง) 
+         * และ Immediate Feedback (แจ้งสถานะทันที)
+         */
         function handleProcess() {
-            // ดึงค่ามาตรวจสอบเบื้องต้น (HCI: Error Prevention)
+            // ดึงค่าจาก Input มาตรวจสอบ
             const name = document.getElementById('receiverName').value;
             const phone = document.getElementById('phone').value;
 
+            // ตรวจสอบว่ากรอกข้อมูลครบหรือไม่ (Validation)
             if (!name || !phone) {
                 showToast('กรุณากรอกข้อมูลให้ครบถ้วน', 'error');
-                return;
+                return; // หยุดการทำงานถ้าข้อมูลไม่ครบ
             }
 
-            // แสดงสถานะสำเร็จ (HCI: Immediate Feedback)
+            // แสดงสถานะสำเร็จเพื่อให้ User มั่นใจว่าระบบได้รับข้อมูลแล้ว
             showToast('ลงทะเบียนพัสดุสำเร็จ! กำลังพากลับหน้าหลัก', 'success');
 
-            // หน่วงเวลา 2 วินาทีเพื่อให้ User อ่านสถานะทัน ก่อนย้ายหน้า
+            // หน่วงเวลา 2 วินาที (Visibility of System Status)
+            // เพื่อให้ User มีเวลาอ่าน Toast ก่อนที่หน้าจอจะเปลี่ยนไป
             setTimeout(() => {
                 location.href = 'dashboard.html?status=added';
             }, 2000);
         }
 
+        /**
+         * ฟังก์ชันสร้างและแสดง Toast Notification
+         * @param {string} message - ข้อความที่ต้องการแสดง
+         * @param {string} type - ประเภท ('success' หรือ 'error')
+         */
         function showToast(message, type) {
             const wrapper = document.getElementById('toast-wrapper');
             const toast = document.createElement('div');
             
-            // กำหนดสีตามประเภท (HCI: Color Coding)
+            // ใช้ Icon และ สี (Color Coding) เพื่อสื่อความหมายให้ชัดเจนโดยไม่ต้องอ่านละเอียด
             const icon = type === 'success' ? '✅' : '❌';
             toast.className = `toast ${type}`; 
+            
+            // ตกแต่งเส้นขอบด้านข้างตามสถานะ (Success = เขียว, Error = แดง)
             toast.style.borderLeft = type === 'success' ? '5px solid #00c851' : '5px solid #ff4444';
             
             toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
             wrapper.appendChild(toast);
 
-            // ลบ Toast ออกหลังจากแสดงผล
+            // ส่วนการทำ Animation ขาออก (Fade out) และลบ Element ออกจากหน่วยความจำ
             setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 500);
+                toast.style.opacity = '0'; // ค่อยๆ จางหาย
+                setTimeout(() => toast.remove(), 500); // ลบออกจาก DOM หลังจากจางแล้ว
             }, 2500);
         }
     </script>

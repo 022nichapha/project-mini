@@ -11,7 +11,9 @@
     <div class="content-section" style="max-width: 600px;">
         <div class="card" style="text-align: left;">
             <h3>🔎 ติดตามพัสดุ</h3>
+            
             <input type="text" id="tID" placeholder="กรอกหมายเลขพัสดุ...">
+            
             <button class="btn-action" style="width:100%" onclick="track()">ตรวจสอบสถานะ</button>
 
             <div id="statusResult" style="display:none; margin-top:30px; border-left: 3px solid var(--primary-yellow); padding-left: 20px;">
@@ -23,9 +25,23 @@
     </div>
 
     <script>
+        /**
+         * ฟังก์ชัน track: 
+         * ทำหน้าที่ตรวจสอบว่ามีการกรอกข้อมูลไหม 
+         * ถ้ามี จะทำการเปลี่ยนสถานะการแสดงผลของ statusResult ให้ปรากฏขึ้น
+         */
         function track() {
-            if(document.getElementById('tID').value) 
+            // ดึงค่าจากช่อง Input ที่มี id ชื่อ 'tID'
+            const trackingInput = document.getElementById('tID').value;
+            
+            // ตรวจสอบว่าช่องว่างหรือไม่ (ถ้ามีค่าจะเป็น true)
+            if(trackingInput) {
+                // เปลี่ยน CSS จาก display: 'none' เป็น 'block' เพื่อแสดงข้อมูล
                 document.getElementById('statusResult').style.display = 'block';
+            } else {
+                // แจ้งเตือนกรณีลืมกรอกเลข
+                alert("กรุณากรอกหมายเลขพัสดุ");
+            }
         }
     </script>
 </body>

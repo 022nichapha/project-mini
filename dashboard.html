@@ -57,17 +57,31 @@
     <div id="toast-wrapper" class="toast-container"></div>
 
     <script>
-        // ฟังก์ชันแสดงการตอบสนอง (HCI: Feedback)
+        /**
+         * ฟังก์ชันตรวจสอบ Parameter ใน URL เพื่อแสดง Feedback ให้ผู้ใช้
+         * (ตามหลัก HCI: Human-Computer Interaction เรื่องการให้การตอบสนอง)
+         */
         function checkURL() {
+            // ดึงค่า Parameters จาก URL (เช่น ?success=true)
             const urlParams = new URLSearchParams(window.location.search);
+            
+            // ถ้าใน URL มีคำว่า 'success' ให้สร้าง Toast แจ้งเตือน
             if (urlParams.has('success')) {
                 const toast = document.createElement('div');
                 toast.className = 'toast';
                 toast.innerHTML = '✅ ดำเนินการสำเร็จเรียบร้อยแล้ว';
+                
+                // นำ Toast ใส่เข้าไปใน Wrapper ที่เตรียมไว้
                 document.getElementById('toast-wrapper').appendChild(toast);
-                setTimeout(() => toast.remove(), 3000);
+                
+                // ตั้งเวลาให้หายไปเองภายใน 3 วินาที (3000 มิลลิวินาที)
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
             }
         }
+        
+        // สั่งให้ฟังก์ชันทำงานทันทีที่โหลดหน้าเว็บเสร็จ
         window.onload = checkURL;
     </script>
 </body>
