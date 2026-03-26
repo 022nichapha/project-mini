@@ -3,47 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
-    <title>Thunder - พัสดุของฉัน</title>
+    <title>Thunder Express - ระบบจัดการพัสดุ</title>
 </head>
 <body>
+
     <nav>
-        <h2 style="margin:0;">⚡ THUNDER</h2>
-        <div>
-            <a href="dashboard.html" style="text-decoration:none; font-weight:bold; color:#333;">พัสดุของฉัน</a> | 
-            <a href="tracking.html" style="text-decoration:none; color:#333;">ติดตามพัสดุ</a> | 
-            <a href="services.html" style="text-decoration:none; color:#333;">รับ/เคลมพัสดุ</a> |
-            <a href="calculator.html" style="text-decoration:none; color:#333;">คำนวณค่าส่ง</a>
-            <a href="index.html" style="color:red; margin-left:15px;">ออกจากระบบ</a>
+        <div class="logo-section" onclick="location.href='dashboard.html'">
+            <h1>⚡ THUNDER</h1>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">หน้าหลัก</a>
+            <a href="tracking.html">ติดตามพัสดุ</a>
+            <a href="calculator.html">เช็คราคา</a>
+            <a href="index.html" style="color: #ff4444;">ออกจากระบบ</a>
         </div>
     </nav>
 
-    <div class="container">
-        <h3>➕ เพิ่มพัสดุใหม่</h3>
-        <div style="display: flex; gap: 10px;">
-            <input type="text" id="pName" placeholder="ชื่อพัสดุ">
-            <button onclick="addParcel()">เพิ่ม</button>
+    <header class="hero">
+        <h2 style="margin-bottom:25px;">ตรวจสอบสถานะพัสดุของคุณ</h2>
+        <div class="search-box-container">
+            <input type="text" id="trackInput" placeholder="กรอกหมายเลขพัสดุ 10 หลัก...">
+            <button class="btn-search" onclick="location.href='tracking.html'">ค้นหา</button>
         </div>
+    </header>
+
+    <div class="content-section">
+        <h3 style="text-align:center; margin-bottom:40px;">บริการแนะนำสำหรับคุณ</h3>
         
-        <hr style="margin: 20px 0; border: 0.5px solid #eee;">
-        
-        <h3>📦 รายการพัสดุของฉัน</h3>
-        <ul id="list" style="list-style: none; padding: 0;">
-            <li style="padding: 10px; border-bottom: 1px solid #eee;">📦 #TH-9901 | สมาร์ทโฟน (กำลังจัดส่ง)</li>
-        </ul>
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon">📦</div>
+                <h4>เพิ่มพัสดุ</h4>
+                <p style="color:var(--gray-text)">ลงทะเบียนส่งพัสดุใหม่</p>
+                <button class="btn-action" onclick="location.href='add-parcel.html'">เพิ่มข้อมูล</button>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📑</div>
+                <h4>เคลมพัสดุ</h4>
+                <p style="color:var(--gray-text)">แจ้งปัญหาหรือขอเงินคืน</p>
+                <button class="btn-action" onclick="location.href='claim.html'">แจ้งเรื่อง</button>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🏠</div>
+                <h4>รับพัสดุ</h4>
+                <p style="color:var(--gray-text)">เรียกรถเข้ารับพัสดุที่บ้าน</p>
+                <button class="btn-action" onclick="location.href='pickup.html'">เรียกนัดรับ</button>
+            </div>
+        </div>
     </div>
 
+    <div id="toast-wrapper" class="toast-container"></div>
+
     <script>
-        function addParcel() {
-            const val = document.getElementById('pName').value;
-            if(val) {
-                const li = document.createElement('li');
-                li.style.padding = "10px";
-                li.style.borderBottom = "1px solid #eee";
-                li.innerHTML = `📦 #TH-NEW | ${val} (รอดำเนินการ)`;
-                document.getElementById('list').appendChild(li);
-                document.getElementById('pName').value = "";
+        // ฟังก์ชันแสดงการตอบสนอง (HCI: Feedback)
+        function checkURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('success')) {
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.innerHTML = '✅ ดำเนินการสำเร็จเรียบร้อยแล้ว';
+                document.getElementById('toast-wrapper').appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
             }
         }
+        window.onload = checkURL;
     </script>
 </body>
 </html>

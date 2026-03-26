@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Thunder - แจ้งเคลมพัสดุ</title>
+</head>
+<body>
+    <nav>
+        <div class="logo-section" onclick="location.href='dashboard.html'"><h1>⚡ THUNDER</h1></div>
+        <div class="nav-links">
+            <a href="dashboard.html">หน้าหลัก</a>
+            <a href="tracking.html">ติดตามพัสดุ</a>
+            <a href="calculator.html">เช็คราคา</a>
+            <a href="index.html" style="color: #ff4444;">ออกจากระบบ</a>
+        </div>
+    </nav>
+
+    <div class="content-section">
+        <button class="btn-back" onclick="location.href='dashboard.html'">← ย้อนกลับ</button>
+        
+        <div class="card">
+            <h2>📑 แจ้งเคลมพัสดุเสียหาย/สูญหาย</h2>
+            <p style="color: var(--gray-text); margin-bottom: 20px;">กรุณาระบุข้อมูลตามความจริง เพื่อความรวดเร็วในการพิจารณา</p>
+            
+            <form id="claimForm">
+                <div class="form-group">
+                    <label>หมายเลขพัสดุที่ต้องการเคลม</label>
+                    <input type="text" id="claimTrack" placeholder="THXXXXXXXXXX" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>รายละเอียดความเสียหาย</label>
+                    <textarea id="claimDetail" rows="4" placeholder="กรุณาระบุรายละเอียด เช่น กล่องบุบ, สินค้าแตกหัก ฯลฯ" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>แนบรูปภาพหลักฐาน (รูปกล่องและสินค้า)</label>
+                    <input type="file" id="claimFile" accept="image/*">
+                </div>
+                
+                <button type="button" class="btn-action" 
+                        style="background-color: #ff4444; color: white; box-shadow: 0 4px 0 #cc0000;" 
+                        onclick="submitClaim()">
+                    ส่งคำขอเคลม
+                </button>
+            </form>
+        </div>
+
+        <div id="claimStatusCard" class="card" style="margin-top: 30px; display: none; border: 1px solid #ff4444; background: #fff5f5;">
+            <h4 style="margin:0; color:#cc0000;">🕒 อยู่ระหว่างการตรวจสอบ</h4>
+            <p id="displayClaimID" style="font-weight: bold; margin: 10px 0;"></p>
+            <p style="font-size: 0.85rem; color: #666;">เจ้าหน้าที่จะติดต่อกลับภายใน 24 ชม.</p>
+        </div>
+    </div>
+
+    <div id="toast-wrapper" class="toast-container"></div>
+
+    <script>
+        function submitClaim() {
+            const track = document.getElementById('claimTrack').value;
+            const detail = document.getElementById('claimDetail').value;
+
+            // ตรวจสอบความว่างเปล่า (HCI: Error Prevention)
+            if (!track || !detail) {
+                showToast('กรุณากรอกข้อมูลให้ครบถ้วนก่อนส่ง', 'error');
+                return;
+            }
+
+            // จำลองการบันทึกข้อมูล
+            localStorage.setItem('lastClaimTrack', track);
+            localStorage.setItem('claimStatus', 'Pending');
+
+            // แสดง Feedback ทันที
+            showToast('ส่งคำขอเคลมสำเร็จ! เจ้าหน้าที่จะตรวจสอบโดยเร็ว', 'success');
+
+            // แสดงสถานะในหน้าปัจจุบัน (HCI: Visibility of System Status)
+            document.getElementById('claimForm').reset();
+            document.getElementById('claimStatusCard').style.display = 'block';
+            document.getElementById('displayClaimID').innerText = "หมายเลขเคลมสำหรับพัสดุ: " + track;
+
+            // หน่วงเวลาเล็กน้อยก่อนกลับหน้าหลัก (หรือจะให้ผู้ใช้อยู่หน้านี้เพื่อดูสถานะก็ได้)
+            setTimeout(() => {
+                location.href = 'dashboard.html?status=claimed';
+            }, 3000);
+        }
+
+        function showToast(message, type) {
+            const wrapper = document.getElementById('toast-wrapper');
+            const toast = document.createElement('div');
+            const icon = type === 'success' ? '✅' : '❌';
+            toast.className = `toast ${type}`;
+            toast.style.borderLeft = type === 'success' ? '5px solid #00c851' : '5px solid #ff4444';
+            toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+            wrapper.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500);
+            }, 2500);
+        }
+    </script>
+</body>
+</html>

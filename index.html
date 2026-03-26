@@ -2,19 +2,142 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Thunder - Login</title>
+    <title>Thunder Express - ยินดีต้อนรับ</title>
+    <style>
+        /* สไตล์เพิ่มเติมเฉพาะหน้า Login/Register */
+        .auth-container {
+            max-width: 450px;
+            margin: 80px auto;
+            perspective: 1000px;
+        }
+        .auth-card {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        .auth-toggle {
+            display: flex;
+            background: #eee;
+            border-radius: 50px;
+            margin-bottom: 30px;
+            padding: 5px;
+        }
+        .toggle-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+        }
+        .toggle-btn.active {
+            background: var(--primary-yellow);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .hidden { display: none; }
+        
+        /* HCI Feedback: แสดงสถานะความปลอดภัยรหัสผ่าน */
+        .pw-strength {
+            height: 5px;
+            width: 100%;
+            background: #ddd;
+            margin-top: -5px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .pw-bar { height: 100%; width: 0%; transition: 0.3s; }
+    </style>
 </head>
 <body>
-    <div class="container" style="max-width: 400px; margin-top: 100px; text-align: center;">
-        <h1 style="font-size: 3rem;">⚡</h1>
-        <h2>THUNDER LOGIN</h2>
-        <input type="text" id="user" placeholder="ชื่อผู้ใช้งาน / อีเมล">
-        <input type="password" id="pass" placeholder="รหัสผ่าน">
-        <button onclick="window.location.href='dashboard.html'" style="width: 100%;">เข้าสู่ระบบ</button>
-        <p style="margin-top: 20px; font-size: 0.9rem;">
-            ยังไม่มีบัญชี? <a href="#" onclick="alert('ระบบสมัครสมาชิกกำลังเปิดใช้งาน')">สมัครสมาชิกที่นี่</a>
-        </p>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1 style="font-style: italic; margin-bottom: 10px;">⚡ THUNDER</h1>
+            <p style="color: var(--gray-text); margin-bottom: 30px;">ระบบจัดการขนส่งอัจฉริยะ</p>
+
+            <div class="auth-toggle">
+                <button id="loginTab" class="toggle-btn active" onclick="switchTab('login')">เข้าสู่ระบบ</button>
+                <button id="regTab" class="toggle-btn" onclick="switchTab('register')">สมัครสมาชิก</button>
+            </div>
+
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>เบอร์โทรศัพท์ / อีเมล</label>
+                    <input type="text" placeholder="example@email.com">
+                </div>
+                <div class="form-group">
+                    <label>รหัสผ่าน</label>
+                    <input type="password" placeholder="••••••••">
+                </div>
+                <button class="btn-action" style="width: 100%;" onclick="location.href='dashboard.html'">เข้าสู่ระบบ</button>
+                <p style="font-size: 0.8rem; margin-top: 20px; color: var(--gray-text);">ลืมรหัสผ่านใช่หรือไม่?</p>
+            </div>
+
+            <div id="registerForm" class="hidden">
+                <div class="form-group">
+                    <label>ชื่อ-นามสกุล</label>
+                    <input type="text" placeholder="สมชาย สายฟ้า">
+                </div>
+                <div class="form-group">
+                    <label>เบอร์โทรศัพท์</label>
+                    <input type="text" placeholder="08x-xxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label>รหัสผ่านใหม่</label>
+                    <input type="password" id="pwInput" oninput="checkStrength()" placeholder="อย่างน้อย 8 ตัวอักษร">
+                    <div class="pw-strength"><div id="pwBar" class="pw-bar"></div></div>
+                </div>
+                <button class="btn-action" style="width: 100%;" onclick="handleRegister()">ยืนยันการสมัคร</button>
+            </div>
+        </div>
     </div>
+
+    <script>
+        function switchTab(type) {
+            const loginF = document.getElementById('loginForm');
+            const regF = document.getElementById('registerForm');
+            const loginT = document.getElementById('loginTab');
+            const regT = document.getElementById('regTab');
+
+            if(type === 'login') {
+                loginF.classList.remove('hidden');
+                regF.classList.add('hidden');
+                loginT.classList.add('active');
+                regT.classList.remove('active');
+            } else {
+                loginF.classList.add('hidden');
+                regF.classList.remove('hidden');
+                loginT.classList.remove('active');
+                regT.classList.add('active');
+            }
+        }
+
+        // HCI: Visual Feedback สำหรับความปลอดภัยรหัสผ่าน
+        function checkStrength() {
+            const val = document.getElementById('pwInput').value;
+            const bar = document.getElementById('pwBar');
+            if(val.length < 5) {
+                bar.style.width = '30%';
+                bar.style.background = '#ff4444';
+            } else if(val.length < 8) {
+                bar.style.width = '60%';
+                bar.style.background = '#ffbb33';
+            } else {
+                bar.style.width = '100%';
+                bar.style.background = '#00c851';
+            }
+        }
+
+        function handleRegister() {
+            alert('สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ');
+            switchTab('login');
+        }
+    </script>
 </body>
 </html>

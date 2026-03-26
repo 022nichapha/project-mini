@@ -3,150 +3,146 @@
 :root {
     --primary-yellow: #FFD700;
     --dark-yellow: #FFCC00;
-    --bg-light: #F8F9FA;
+    --bg-light: #FBFBFB;
     --white: #ffffff;
-    --dark-text: #1a1a1a;
+    --dark-text: #222;
+    --gray-text: #666;
+    --shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
+
+* { box-sizing: border-box; transition: all 0.2s ease-in-out; }
 
 body {
     font-family: 'Kanit', sans-serif;
     background-color: var(--bg-light);
     color: var(--dark-text);
     margin: 0;
-    padding: 0;
 }
 
-/* Navbar: จัดให้เนื้อหาหลักอยู่ตรงกลาง และกระจายออก */
+/* NAVIGATION */
 nav {
     background-color: var(--primary-yellow);
-    padding: 10px 5%;
+    padding: 12px 5%;
     display: flex;
-    justify-content: center; /* จัดกลุ่มเมนูให้อยู่กลาง */
+    justify-content: space-between;
     align-items: center;
-    gap: 30px; /* ระยะห่างระหว่างโลโก้ ค้นหา และลิงก์ */
     position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    top: 0; z-index: 1000;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
 }
 
-.logo-section h1 {
-    margin: 0;
-    font-size: 1.2rem;
-    font-style: italic;
-    font-weight: 800;
-    line-height: 1;
-    text-align: center;
-}
-
-.nav-search {
-    display: flex;
-    background: white;
-    border-radius: 25px;
-    padding: 2px 5px 2px 15px;
-    align-items: center;
-    border: 1px solid rgba(0,0,0,0.1);
-}
-
-.nav-search input {
-    border: none;
-    padding: 8px;
-    outline: none;
-    width: 250px;
-    font-family: 'Kanit', sans-serif;
-}
-
-.nav-links {
-    display: flex;
-    align-items: center;
-}
+.logo-section h1 { margin: 0; font-size: 1.4rem; font-style: italic; cursor: pointer; }
 
 .nav-links a {
     text-decoration: none;
     color: var(--dark-text);
-    margin: 0 10px;
+    margin-left: 20px;
     font-weight: 600;
-    font-size: 0.85rem;
-    white-space: nowrap;
+    font-size: 0.9rem;
 }
 
-/* Hero Section: ปรับกล่องค้นหาใหญ่ให้อยู่กึ่งกลางหน้าจอพอดี */
+.nav-links a:hover { opacity: 0.7; }
+
+/* HERO SEARCH */
 .hero {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 60px 10%;
     background: white;
-    margin-bottom: 40px;
-}
-
-.hero-search-container {
-    width: 100%;
-    max-width: 700px;
-    display: flex;
-    align-items: center;
-    background: #fff;
-    padding: 10px;
-    border-radius: 50px; /* มนแบบในรูป */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-.hero-search-container input {
-    flex: 1;
-    border: none;
-    padding: 15px 25px;
-    outline: none;
-    font-size: 1rem;
-    border-radius: 50px 0 0 50px;
-}
-
-/* ปุ่มในช่องค้นหาใหญ่ */
-.btn-track {
-    background: var(--primary-yellow);
-    border: none;
-    padding: 15px 30px;
-    border-radius: 40px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-/* บริการแนะนำ: จัด Title ให้อยู่กลาง */
-.section-title {
+    padding: 60px 20px;
     text-align: center;
-    margin-bottom: 30px;
-    font-weight: 600;
+    border-bottom: 1px solid #eee;
 }
 
-/* Grid: จัด Card ให้อยู่กึ่งกลางเสมอ */
-.services-grid {
+.search-box-container {
+    max-width: 650px;
+    margin: 0 auto;
+    display: flex;
+    box-shadow: var(--shadow);
+    border-radius: 50px;
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
+.search-box-container input {
+    flex: 1; border: none; padding: 18px 30px; outline: none; font-size: 1rem;
+}
+
+.btn-search {
+    background: var(--primary-yellow);
+    border: none; padding: 0 35px; font-weight: bold; cursor: pointer;
+}
+
+/* GRID & CARDS */
+.content-section {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 25px;
-    max-width: 1200px;
-    margin: 0 auto; /* จัด Grid ทั้งชุดให้อยู่กลางหน้าจอ */
-    padding: 0 5% 50px 5%;
 }
 
 .card {
     background: var(--white);
-    padding: 40px 20px;
+    padding: 35px 25px;
     border-radius: 25px;
     text-align: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* จัดเนื้อหาใน Card ให้อยู่กลาง */
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0,0,0,0.02);
 }
 
-.btn-yellow {
+.card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
+
+.card-icon { font-size: 45px; margin-bottom: 15px; }
+
+/* BUTTONS */
+.btn-action {
     background-color: var(--primary-yellow);
     color: var(--dark-text);
     border: none;
-    padding: 12px 0;
-    width: 80%; /* ไม่ให้ปุ่มกว้างเต็มจนเกินไป */
+    padding: 12px 40px;
     border-radius: 25px;
-    font-weight: bold;
+    font-weight: 600;
     cursor: pointer;
-    margin-top: auto; /* ดันปุ่มลงล่างสุดของ Card */
+    margin-top: 20px;
+    box-shadow: 0 4px 0 #e6c200;
 }
+
+.btn-action:active { transform: translateY(2px); box-shadow: none; }
+
+/* FORM ELEMENTS */
+.form-group { margin-bottom: 15px; text-align: left; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+input[type="text"], input[type="number"], input[type="password"], select, textarea {
+    width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px; font-family: 'Kanit', sans-serif;
+}
+
+/* --- TOAST NOTIFICATION --- */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.toast {
+    background: #333;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 12px;
+    margin-top: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes slideIn {
+    from { transform: translateX(110%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.toast.success { border-left: 5px solid #00c851; }
+.toast.error { border-left: 5px solid #ff4444; }

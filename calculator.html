@@ -4,73 +4,33 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
     <title>Thunder - คำนวณค่าส่ง</title>
-    <style>
-        .result-box {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #fff9db;
-            border: 2px dashed #ffd700;
-            border-radius: 10px;
-            text-align: center;
-            display: none;
-        }
-        .price-tag {
-            font-size: 2rem;
-            color: #d4af37;
-            font-weight: bold;
-        }
-    </style>
 </head>
 <body>
-    <nav>
-        <h2 style="margin:0;">⚡ THUNDER</h2>
-        <div>
-            <a href="dashboard.html" style="text-decoration:none; color:#333;">หน้าหลัก</a> | 
-            <a href="calculator.html" style="text-decoration:none; font-weight:bold; color:#333;">คำนวณค่าส่ง</a>
-        </div>
-    </nav>
+    <nav></nav>
 
-    <div class="container">
-        <h3>📊 ประเมินค่าขนส่งล่วงหน้า</h3>
-        <p style="font-size: 0.9rem; color: #666;">คำนวณง่ายๆ เพียงระบุน้ำหนักและปลายทาง</p>
-        
-        <label>น้ำหนักพัสดุ (กิโลกรัม):</label>
-        <input type="number" id="weight" placeholder="เช่น 1.5" step="0.1" min="0">
-
-        <label>พื้นที่ปลายทาง:</label>
-        <select id="destination" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ddd;">
-            <option value="30">กรุงเทพฯ และปริมณฑล (เริ่มต้น 30฿)</option>
-            <option value="50">ต่างจังหวัด (เริ่มต้น 50฿)</option>
-            <option value="100">พื้นที่ห่างไกล / เกาะ (เริ่มต้น 100฿)</option>
-        </select>
-
-        <button onclick="calculatePrice()" style="width: 100%; margin-top: 10px;">คำนวณราคา</button>
-
-        <div id="priceDisplay" class="result-box">
-            <p>ค่าบริการประมาณการ</p>
-            <div class="price-tag"><span id="totalPrice">0</span> บาท</div>
-            <p style="font-size: 0.8rem; color: #888;">*ราคานี้ยังไม่รวมค่าประกันพัสดุ</p>
+    <div class="content-section" style="max-width: 500px;">
+        <div class="card">
+            <h3>🧮 คำนวณค่าจัดส่ง</h3>
+            <div class="form-group">
+                <label>น้ำหนัก (กก.)</label>
+                <input type="number" id="w" placeholder="0.00">
+            </div>
+            <div class="form-group">
+                <label>ปลายทาง</label>
+                <select id="dest">
+                    <option value="30">กรุงเทพฯ</option>
+                    <option value="50">ต่างจังหวัด</option>
+                </select>
+            </div>
+            <button class="btn-action" style="width:100%" onclick="cal()">คำนวณ</button>
+            <h2 id="res" style="margin-top:20px; color:var(--dark-yellow)"></h2>
         </div>
     </div>
 
     <script>
-        function calculatePrice() {
-            const weight = parseFloat(document.getElementById('weight').value);
-            const basePrice = parseFloat(document.getElementById('destination').value);
-            const display = document.getElementById('priceDisplay');
-            const result = document.getElementById('totalPrice');
-
-            if (isNaN(weight) || weight <= 0) {
-                alert("กรุณาระบุน้ำหนักที่ถูกต้องครับ");
-                return;
-            }
-
-            // Logic การคำนวณ: ค่าเริ่มต้น + (น้ำหนัก * 15 บาทต่อกิโล)
-            let weightCharge = weight * 15;
-            let total = basePrice + weightCharge;
-
-            result.innerText = total.toLocaleString(); // ใส่คอมมาให้ตัวเลข
-            display.style.display = 'block';
+        function cal() {
+            let total = parseFloat(document.getElementById('w').value || 0) * 15 + parseInt(document.getElementById('dest').value);
+            document.getElementById('res').innerText = total + " บาท";
         }
     </script>
 </body>

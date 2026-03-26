@@ -3,38 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
-    <title>Thunder - Tracking</title>
+    <title>Thunder - ติดตามพัสดุ</title>
 </head>
 <body>
-    <nav>
-        <h2 style="margin:0;">⚡ THUNDER</h2>
-        <div>
-            <a href="dashboard.html">หน้าหลัก</a> | 
-            <a href="tracking.html" style="font-weight:bold;">ติดตามพัสดุ</a>
-        </div>
-    </nav>
+    <nav></nav>
 
-    <div class="container">
-        <h3>🔍 ค้นหาและติดตามพัสดุ</h3>
-        <div style="display: flex; gap: 10px;">
-            <input type="text" id="trackID" placeholder="กรอกเลขพัสดุ เช่น TD789">
-            <button onclick="showTrack()">ค้นหา</button>
-        </div>
+    <div class="content-section" style="max-width: 600px;">
+        <div class="card" style="text-align: left;">
+            <h3>🔎 ติดตามพัสดุ</h3>
+            <input type="text" id="tID" placeholder="กรอกหมายเลขพัสดุ...">
+            <button class="btn-action" style="width:100%" onclick="track()">ตรวจสอบสถานะ</button>
 
-        <div id="trackResult" style="display:none; margin-top:30px; padding:20px; background:#f9f9f9; border-radius:10px;">
-            <p><strong>พัสดุเลขที่:</strong> <span id="displayID"></span></p>
-            <p>✅ <b>สถานะล่าสุด:</b> พัสดุถึงจุดคัดแยก (กรุงเทพฯ)</p>
-            <p style="color: gray; font-size: 0.8rem;">อัปเดตเมื่อ: 27 มี.ค. 2026</p>
+            <div id="statusResult" style="display:none; margin-top:30px; border-left: 3px solid var(--primary-yellow); padding-left: 20px;">
+                <p><strong>สถานะ:</strong> <span style="color: green;">กำลังนำจ่าย</span></p>
+                <p style="font-size:0.9rem;">📍 ศูนย์กระจายสินค้า: นครปฐม</p>
+                <p style="color:gray; font-size:0.8rem;">อัปเดตล่าสุด: 27 มี.ค. 2026 09:30</p>
+            </div>
         </div>
     </div>
 
     <script>
-        function showTrack() {
-            const id = document.getElementById('trackID').value;
-            if(id) {
-                document.getElementById('displayID').innerText = id;
-                document.getElementById('trackResult').style.display = 'block';
-            }
+        function track() {
+            if(document.getElementById('tID').value) 
+                document.getElementById('statusResult').style.display = 'block';
         }
     </script>
 </body>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Thunder - นัดรับพัสดุ</title>
+</head>
+<body>
+    <nav>
+        <div class="logo-section" onclick="location.href='dashboard.html'"><h1>⚡ THUNDER</h1></div>
+        <div class="nav-links">
+            <a href="dashboard.html">หน้าหลัก</a>
+            <a href="tracking.html">ติดตามพัสดุ</a>
+            <a href="calculator.html">เช็คราคา</a>
+            <a href="index.html" style="color: #ff4444;">ออกจากระบบ</a>
+        </div>
+    </nav>
+
+    <div class="content-section">
+        <button class="btn-back" onclick="location.href='dashboard.html'">← ย้อนกลับ</button>
+        
+        <div class="card">
+            <div class="card-icon" style="font-size: 40px;">🏠</div>
+            <h2>นัดรับพัสดุที่บ้าน</h2>
+            <p style="color: var(--gray-text); margin-bottom: 25px;">เจ้าหน้าที่จะเข้ารับพัสดุตามตำแหน่งและเวลาที่คุณระบุ</p>
+            
+            <form id="pickupForm">
+                <div class="form-group">
+                    <label>ที่อยู่สำหรับนัดรับ</label>
+                    <textarea id="address" rows="3" placeholder="ระบุเลขที่บ้าน, หมู่บ้าน/คอนโด, ซอย, ถนน, แขวง, เขต..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>ช่วงเวลาที่สะดวกให้เข้ารับ</label>
+                    <select id="timeSlot">
+                        <option value="9:00 - 12:00">ช่วงเช้า (09:00 - 12:00)</option>
+                        <option value="13:00 - 16:00">ช่วงบ่าย (13:00 - 16:00)</option>
+                        <option value="16:00 - 18:00">ช่วงเย็น (16:00 - 18:00)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>จำนวนพัสดุโดยประมาณ (ชิ้น)</label>
+                    <input type="number" id="quantity" min="1" value="1">
+                </div>
+
+                <button type="button" class="btn-action" onclick="confirmPickup()">ยืนยันนัดรับพัสดุ</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-wrapper" class="toast-container"></div>
+
+    <script>
+        function confirmPickup() {
+            const address = document.getElementById('address').value;
+            const time = document.getElementById('timeSlot').value;
+
+            if (!address) {
+                showToast('กรุณาระบุที่อยู่สำหรับนัดรับ', 'error');
+                return;
+            }
+
+            // บันทึกข้อมูลจำลอง
+            localStorage.setItem('lastPickupTime', time);
+            localStorage.setItem('pickupStatus', 'Scheduled');
+
+            // แสดงสถานะแจ้งเตือน
+            showToast(`นัดรับสำเร็จ! เจ้าหน้าที่จะเข้าไปในช่วง ${time}`, 'success');
+
+            // ส่งค่ากลับไปหน้าหลักหลังจากแจ้งเตือน
+            setTimeout(() => {
+                location.href = 'dashboard.html?status=pickup_set';
+            }, 2500);
+        }
+
+        function showToast(message, type) {
+            const wrapper = document.getElementById('toast-wrapper');
+            const toast = document.createElement('div');
+            const icon = type === 'success' ? '✅' : '❌';
+            toast.className = `toast ${type}`;
+            toast.style.borderLeft = type === 'success' ? '5px solid #00c851' : '5px solid #ff4444';
+            toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+            wrapper.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500);
+            }, 2500);
+        }
+    </script>
+</body>
+</html>

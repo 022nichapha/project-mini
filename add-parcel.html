@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Thunder - ลงทะเบียนส่งพัสดุ</title>
+</head>
+<body>
+    <nav>
+        <div class="logo-section" onclick="location.href='dashboard.html'"><h1>⚡ THUNDER</h1></div>
+        <div class="nav-links">
+            <a href="dashboard.html">หน้าหลัก</a>
+            <a href="tracking.html">ติดตามพัสดุ</a>
+            <a href="calculator.html">เช็คราคา</a>
+            <a href="index.html" style="color: #ff4444;">ออกจากระบบ</a>
+        </div>
+    </nav>
+
+    <div class="content-section">
+        <button class="btn-back" onclick="location.href='dashboard.html'">← ย้อนกลับ</button>
+        
+        <div class="card">
+            <h2>📦 ลงทะเบียนส่งพัสดุ</h2>
+            <p style="color: var(--gray-text); margin-bottom: 25px;">กรุณากรอกข้อมูลผู้รับให้ครบถ้วนเพื่อความรวดเร็วในการจัดส่ง</p>
+            
+            <form id="parcelForm">
+                <div class="form-group">
+                    <label>ชื่อผู้รับ</label>
+                    <input type="text" id="receiverName" placeholder="ระบุชื่อ-นามสกุล" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>เบอร์โทรศัพท์ผู้รับ</label>
+                    <input type="text" id="phone" placeholder="08x-xxxxxxx" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>ประเภทสินค้า</label>
+                    <select id="category">
+                        <option value="doc">เอกสาร</option>
+                        <option value="cloth">เสื้อผ้า/ของใช้</option>
+                        <option value="gadget">อุปกรณ์อิเล็กทรอนิกส์</option>
+                        <option value="other">อื่นๆ</option>
+                    </select>
+                </div>
+                
+                <button type="button" class="btn-action" onclick="handleProcess()">ยืนยันข้อมูลและชำระเงิน</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-wrapper" class="toast-container"></div>
+
+    <script>
+        function handleProcess() {
+            // ดึงค่ามาตรวจสอบเบื้องต้น (HCI: Error Prevention)
+            const name = document.getElementById('receiverName').value;
+            const phone = document.getElementById('phone').value;
+
+            if (!name || !phone) {
+                showToast('กรุณากรอกข้อมูลให้ครบถ้วน', 'error');
+                return;
+            }
+
+            // แสดงสถานะสำเร็จ (HCI: Immediate Feedback)
+            showToast('ลงทะเบียนพัสดุสำเร็จ! กำลังพากลับหน้าหลัก', 'success');
+
+            // หน่วงเวลา 2 วินาทีเพื่อให้ User อ่านสถานะทัน ก่อนย้ายหน้า
+            setTimeout(() => {
+                location.href = 'dashboard.html?status=added';
+            }, 2000);
+        }
+
+        function showToast(message, type) {
+            const wrapper = document.getElementById('toast-wrapper');
+            const toast = document.createElement('div');
+            
+            // กำหนดสีตามประเภท (HCI: Color Coding)
+            const icon = type === 'success' ? '✅' : '❌';
+            toast.className = `toast ${type}`; 
+            toast.style.borderLeft = type === 'success' ? '5px solid #00c851' : '5px solid #ff4444';
+            
+            toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+            wrapper.appendChild(toast);
+
+            // ลบ Toast ออกหลังจากแสดงผล
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500);
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
