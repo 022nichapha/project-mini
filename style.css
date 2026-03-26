@@ -2,6 +2,8 @@
 
 :root {
     --primary-yellow: #FFD700;
+    --primary-gray: #d7473c;
+    --primary-salmon: #7c54b7;
     --dark-yellow: #FFCC00;
     --bg-light: #FBFBFB;
     --white: #ffffff;
@@ -110,6 +112,26 @@ nav {
 }
 
 .btn-action:active { transform: translateY(2px); box-shadow: none; }
+
+.btn-back{
+    background: var(--primary-yellow);
+  
+    color: var(--dark-text);
+    padding: 8px 18px;
+    border-radius: 15px;
+    font-family: 'Kanit', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+/* hover effect */
+.btn-back:hover{
+    background: var(--primary-gray);
+    color: #eee;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
 
 /* FORM ELEMENTS */
 .form-group { margin-bottom: 15px; text-align: left; }
