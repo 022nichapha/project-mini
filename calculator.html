@@ -40,20 +40,40 @@
         </div>
     </div>
 
-    <script>
-        function cal() {
-            // 1. ดึงค่าน้ำหนักจาก Input (ถ้าว่างให้เป็น 0) และแปลงเป็นตัวเลขทศนิยม
-            let weight = parseFloat(document.getElementById('w').value || 0);
-            
-            // 2. ดึงค่าธรรมเนียมปลายทางจาก Select และแปลงเป็นตัวเลขจำนวนเต็ม
-            let basePrice = parseInt(document.getElementById('dest').value);
-            
-            // 3. คำนวณราคาสุทธิ: (น้ำหนัก * 15 บาท) + ค่าปลายทาง
-            let total = (weight * 15) + basePrice;
-            
-            // 4. แสดงผลลัพธ์ที่คำนวณได้ลงใน element ที่มี id เป็น 'res'
-            document.getElementById('res').innerText = total + " บาท";
+
+<script>
+    function cal() {
+        let weightInput = document.getElementById('w').value;
+        let weight = parseFloat(weightInput || 0);
+        let basePrice = parseInt(document.getElementById('dest').value);
+        let resElement = document.getElementById('res');
+
+        // 1. Validation: ตรวจสอบการกรอกข้อมูล
+        if (weightInput === "" || weight <= 0) {
+            resElement.innerText = "กรุณาระบุน้ำหนักที่ถูกต้อง";
+            resElement.style.color = "#ff4444";
+            return;
         }
-    </script>
+
+        // 2. Calculation
+        let shippingFee = weight * 15;
+        let total = shippingFee + basePrice;
+
+        // 3. Display with Formatting
+        resElement.style.color = "var(--dark-yellow)";
+        resElement.innerHTML = `
+            <small style="font-size: 14px; color: #666; display: block;">ราคารวมทั้งสิ้น:</small>
+            ${total.toLocaleString(undefined, {minimumFractionDigits: 2})} บาท
+            <div style="font-size: 12px; color: #888; margin-top: 5px;">
+                (ค่าขนส่ง ${shippingFee} + ค่าพื้นที่ ${basePrice})
+            </div>
+        `;
+    }
+
+    function resetForm() {
+        document.getElementById('w').value = "";
+        document.getElementById('res').innerText = "";
+    }
+</script>
 </body>
 </html>
