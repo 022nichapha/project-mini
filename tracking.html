@@ -2,55 +2,127 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Thunder - ติดตามพัสดุ</title>
+    
+    
 </head>
 <body>
+    
     <nav>
-        <div class="logo-section" onclick="location.href='calculator.html'">
-            <h1>⚡ THUNDER</h1>
+        <div class="logo-section" onclick="location.href='index.html'">
+            <h1>⚡ <span>THUNDER</span></h1>
         </div>
         <div class="nav-links">
-            <a href="dashboard.html">หน้าหลัก</a>
+            <a href="index.html">หน้าหลัก</a>
             <a href="tracking.html">ติดตามพัสดุ</a>
             <a href="calculator.html">เช็คราคา</a>
             <a href="index.html" style="color: #ff4444;">ออกจากระบบ</a>
         </div>
     </nav>
 
-    <div class="content-section" style="max-width: 600px;">
+    <div class="content-section" style="max-width: 700px;">
         <div class="card" style="text-align: left;">
-            <h3>🔎 ติดตามพัสดุ</h3>
+            <h2 style="margin-top: 0;">🔍 ติดตามพัสดุ</h2>
+            <p style="color: gray;">ระบุหมายเลขพัสดุเพื่อตรวจสอบสถานะล่าสุด</p>
             
-            <input type="text" id="tID" placeholder="กรอกหมายเลขพัสดุ...">
-            
-            <button class="btn-action" style="width:100%" onclick="track()">ตรวจสอบสถานะ</button>
+            <div class="search-box-container" style="margin-bottom: 20px; box-shadow: none; border: 1px solid #ddd;">
+                <input type="text" id="tID" placeholder="กรอกหมายเลขพัสดุ (เช่น TD123456)">
+                <button class="btn-search" onclick="track()">ตรวจสอบ</button>
+            </div>
 
-            <div id="statusResult" style="display:none; margin-top:30px; border-left: 3px solid var(--primary-yellow); padding-left: 20px;">
-                <p><strong>สถานะ:</strong> <span style="color: green;">กำลังนำจ่าย</span></p>
-                <p style="font-size:0.9rem;">📍 ศูนย์กระจายสินค้า: นครปฐม</p>
-                <p style="color:gray; font-size:0.8rem;">อัปเดตล่าสุด: 27 มี.ค. 2026 09:30</p>
+            <div id="statusResult" style="display:none;">
+                <hr style="opacity: 0.1; margin: 25px 0;">
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>
+                        <span style="background: #e8f5e9; color: #2e7d32; padding: 6px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;">
+                            ● กำลังนำจ่าย
+                        </span>
+                    </div>
+                    <div style="text-align: right;">
+                        <small style="color: gray;">เลขพัสดุ:</small><br>
+                        <strong id="displayID" style="letter-spacing: 1px;">-</strong>
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <div>
+                        <small style="color: #888;">ผู้ส่ง:</small>
+                        <p style="margin: 5px 0; font-weight: 500;">Thunder Shop (BKK)</p>
+                    </div>
+                    <div>
+                        <small style="color: #888;">ผู้รับ:</small>
+                        <p style="margin: 5px 0; font-weight: 500;">คุณสมชาย ใจดี (นครปฐม)</p>
+                    </div>
+                </div>
+
+                <div class="tracking-timeline">
+                    
+                    <div class="timeline-item active">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <span class="time">27 มี.ค. 2026 - 09:30</span>
+                            <span class="status-text" style="color: var(--primary-salmon);">พัสดุอยู่ระหว่างการนำจ่าย</span>
+                            <small>เจ้าหน้าที่กำลังนำพัสดุส่งถึงมือคุณ (คุณวิชัย 081-xxx-xxxx)</small>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <span class="time">27 มี.ค. 2026 - 05:15</span>
+                            <span class="status-text">พัสดุถึงศูนย์กระจายสินค้า: นครปฐม</span>
+                            <small>เตรียมคัดแยกเพื่อส่งต่อไปยังพื้นที่ปลายทาง</small>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <span class="time">26 มี.ค. 2026 - 14:30</span>
+                            <span class="status-text">เข้ารับพัสดุสำเร็จ</span>
+                            <small>Thunder รับพัสดุเข้าสู่ระบบเรียบร้อยแล้ว</small>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <button class="btn-action" style="width:100%; background: #f0f0f0; box-shadow: none; margin-top: 20px; color: #555;" onclick="location.reload()">
+                    กลับไปค้นหาใหม่
+                </button>
             </div>
         </div>
     </div>
 
     <script>
         /**
-         * ฟังก์ชัน track: 
-         * ทำหน้าที่ตรวจสอบว่ามีการกรอกข้อมูลไหม 
-         * ถ้ามี จะทำการเปลี่ยนสถานะการแสดงผลของ statusResult ให้ปรากฏขึ้น
+         * ฟังก์ชัน track() 
+         * ทำงานเมื่อคลิกปุ่ม "ตรวจสอบ"
          */
         function track() {
-            // ดึงค่าจากช่อง Input ที่มี id ชื่อ 'tID'
+            // 1. ดึงค่าจากช่อง Input
             const trackingInput = document.getElementById('tID').value;
+            // 2. ดึง Element ของพื้นที่แสดงผล และ ตัวโชว์เลขพัสดุ
+            const resultArea = document.getElementById('statusResult');
+            const displayID = document.getElementById('displayID');
             
-            // ตรวจสอบว่าช่องว่างหรือไม่ (ถ้ามีค่าจะเป็น true)
-            if(trackingInput) {
-                // เปลี่ยน CSS จาก display: 'none' เป็น 'block' เพื่อแสดงข้อมูล
-                document.getElementById('statusResult').style.display = 'block';
+            // 3. ตรวจสอบว่าผู้ใช้กรอกข้อมูลหรือไม่ (ตัดช่องว่างออกด้วย trim)
+            if(trackingInput.trim() !== "") {
+                
+                // นำเลขที่กรอกไปแสดงในใบสรุปผล (ทำให้เป็นตัวพิมพ์ใหญ่)
+                displayID.innerText = trackingInput.toUpperCase();
+                
+                // สั่งให้ส่วนผลลัพธ์ปรากฏขึ้น (จากเดิม display: none เป็น block)
+                resultArea.style.display = 'block';
+                
+                // เพิ่มลูกเล่นให้หน้าจอเลื่อนลงไปหาผลลัพธ์อัตโนมัติอย่างนุ่มนวล
+                resultArea.scrollIntoView({ behavior: 'smooth' });
+                
             } else {
-                // แจ้งเตือนกรณีลืมกรอกเลข
-                alert("กรุณากรอกหมายเลขพัสดุ");
+                // แจ้งเตือนถ้าไม่ได้กรอกอะไรเลย
+                alert("กรุณากรอกหมายเลขพัสดุของคุณก่อนครับ");
             }
         }
     </script>
