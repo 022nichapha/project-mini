@@ -6,7 +6,71 @@
     <link rel="stylesheet" href="style.css">
     <title>Thunder - ติดตามพัสดุ</title>
     
-    
+    <style>
+        /* --- ส่วนตกแต่งเพิ่มเติมเฉพาะหน้า Tracking (Timeline) --- */
+        
+        /* พื้นที่สำหรับ Timeline เส้นเวลาการส่ง */
+        .tracking-timeline {
+            margin-top: 30px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        /* รายการสถานะแต่ละขั้น */
+        .timeline-item {
+            position: relative;
+            padding-bottom: 25px;
+            border-left: 2px solid #ddd; /* เส้นแนวตั้งเชื่อมสถานะ */
+            padding-left: 20px;
+        }
+
+        /* เอาเส้นของรายการสุดท้ายออก เพื่อความสวยงาม */
+        .timeline-item:last-child {
+            border-left: 2px solid transparent;
+        }
+
+        /* จุดวงกลมแสดงสถานะ */
+        .timeline-dot {
+            position: absolute;
+            left: -31px; /* จัดตำแหน่งให้ทับเส้นแนวตั้งพอดี */
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border: 4px solid var(--primary-yellow);
+            border-radius: 50%;
+        }
+
+        /* ใส่ลูกเล่น Glow (แสงฟุ้ง) ให้สถานะปัจจุบัน */
+        .timeline-item.active .timeline-dot {
+            background: var(--primary-yellow);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+        }
+
+        /* จัดรูปแบบตัวอักษรใน Timeline */
+        .timeline-content .time {
+            font-size: 0.8rem;
+            color: #888;
+            display: block;
+        }
+
+        .timeline-content .status-text {
+            font-weight: 600;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* กล่องข้อมูลผู้รับ-ส่ง */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* แบ่ง 2 ฝั่งซ้ายขวา */
+            gap: 15px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #eee;
+        }
+    </style>
 </head>
 <body>
     
