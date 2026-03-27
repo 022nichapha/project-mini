@@ -58,7 +58,12 @@ nav {
     font-style: italic;
     cursor: pointer;
 }
-
+.nav-links{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:15px;
+}
 .nav-links a {
     text-decoration: none;
     /* เอาเส้นใต้ลิงก์ออก */
@@ -80,9 +85,12 @@ nav {
     text-align: center;
     border-bottom: 1px solid #eee;
 }
-
+.hero h2{
+    font-size:clamp(20px,4vw,28px);
+}
 .search-box-container {
-    max-width: 650px;
+  width:100%;
+    max-width:650px;
     margin: 0 auto;
     display: flex;
     /* จัดเรียง input และปุ่มแบบแนวนอน */
@@ -262,12 +270,15 @@ textarea {
 /* สำหรับ Tablet และมือถือขนาดใหญ่ (หน้าจอต่ำกว่า 768px) */
 @media (max-width: 768px) {
     nav {
+        align-items:center;
         flex-direction: column;
         /* โลโก้อยู่บน เมนูอยู่ล่าง */
         padding: 15px;
         gap: 10px;
     }
-
+.logo-section h1{
+font-size:1.2rem;
+}
     .nav-links {
         margin-top: 10px;
         display: flex;
