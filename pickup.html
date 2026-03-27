@@ -2,8 +2,10 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Thunder - นัดรับพัสดุ</title>
+
 </head>
 <body>
     <nav>
@@ -16,10 +18,10 @@
         </div>
     </nav>
 
-    <div class="content-section">
+    <div class="content-section" style="max-width: 600px;">
         <button class="btn-back" onclick="location.href='dashboard.html'">← ย้อนกลับ</button>
         
-        <div class="card">
+        <div class="card" id="bookingCard">
             <div class="card-icon" style="font-size: 40px;">🏠</div>
             <h2>นัดรับพัสดุที่บ้าน</h2>
             <p style="color: var(--gray-text); margin-bottom: 25px;">เจ้าหน้าที่จะเข้ารับพัสดุตามตำแหน่งและเวลาที่คุณระบุ</p>
@@ -27,25 +29,60 @@
             <form id="pickupForm">
                 <div class="form-group">
                     <label>ที่อยู่สำหรับนัดรับ</label>
-                    <textarea id="address" rows="3" placeholder="ระบุเลขที่บ้าน, หมู่บ้าน/คอนโด, ซอย, ถนน, แขวง, เขต..." required></textarea>
+                    <textarea id="address" rows="3" placeholder="ระบุเลขที่บ้าน, ซอย, ถนน, แขวง, เขต..." required></textarea>
                 </div>
 
-                <div class="form-group">
-                    <label>ช่วงเวลาที่สะดวกให้เข้ารับ</label>
-                    <select id="timeSlot">
-                        <option value="9:00 - 12:00">ช่วงเช้า (09:00 - 12:00)</option>
-                        <option value="13:00 - 16:00">ช่วงบ่าย (13:00 - 16:00)</option>
-                        <option value="16:00 - 18:00">ช่วงเย็น (16:00 - 18:00)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>จำนวนพัสดุโดยประมาณ (ชิ้น)</label>
-                    <input type="number" id="quantity" min="1" value="1">
+                <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>ช่วงเวลาที่สะดวก</label>
+                        <select id="timeSlot">
+                            <option value="ช่วงเช้า (09:00 - 12:00)">ช่วงเช้า</option>
+                            <option value="ช่วงบ่าย (13:00 - 16:00)">ช่วงบ่าย</option>
+                            <option value="ช่วงเย็น (16:00 - 18:00)">ช่วงเย็น</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>จำนวนพัสดุ (ชิ้น)</label>
+                        <input type="number" id="quantity" min="1" value="1">
+                    </div>
                 </div>
 
                 <button type="button" class="btn-action" onclick="confirmPickup()">ยืนยันนัดรับพัสดุ</button>
             </form>
+        </div>
+
+        <div class="card" id="statusCard" style="display: none; border-top: 5px solid var(--primary-yellow);">
+            <div style="text-align: center;">
+                <div id="statusBadge" class="status-badge status-waiting">⏳ รอดำเนินการ</div>
+                <h3 style="margin: 10px 0;">ข้อมูลการนัดรับพัสดุ</h3>
+            </div>
+
+            <div class="courier-card">
+                <div class="courier-img">👤</div>
+                <div>
+                    <div style="font-weight: bold;">สมชาย สายฟ้า (Thunder Rider)</div>
+                    <div style="font-size: 0.85rem; color: #666;">ทะเบียน: 1กข-9999 | โทร: 081-234-56XX</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; font-size: 0.9rem; line-height: 1.6;">
+                <p>📍 <strong>สถานที่:</strong> <span id="displayAddress"></span></p>
+                <p>⏰ <strong>เวลานัดหมาย:</strong> <span id="displayTime"></span></p>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+            <div class="form-group" id="proofSection">
+                <label>📸 อัปโหลดรูปหลักฐาน (เมื่อเจ้าหน้าที่รับไปแล้ว)</label>
+                <input type="file" id="proofInput" accept="image/*" onchange="previewProof(event)">
+                <img id="pickupProofImg" alt="หลักฐานการรับพัสดุ">
+                
+                <button type="button" class="btn-action" id="btnFinish" 
+                        style="width: 100%; margin-top: 15px; background: #222; color: #fff; display: none;" 
+                        onclick="completePickup()">
+                    บันทึกว่ารับพัสดุสำเร็จ
+                </button>
+            </div>
         </div>
     </div>
 
@@ -53,54 +90,80 @@
 
     <script>
         /**
-         * ฟังก์ชันยืนยันการนัดรับพัสดุ
-         * ทำหน้าที่ตรวจสอบข้อมูลเบื้องต้นและบันทึกสถานะ
+         * ฟังก์ชันยืนยันการนัดรับ (HCI: Feedback)
          */
         function confirmPickup() {
             const address = document.getElementById('address').value;
             const time = document.getElementById('timeSlot').value;
 
-            // ตรวจสอบว่าผู้ใช้กรอกที่อยู่หรือยัง
             if (!address) {
                 showToast('กรุณาระบุที่อยู่สำหรับนัดรับ', 'error');
                 return;
             }
 
-            // จำลองการบันทึกข้อมูลลง LocalStorage เพื่อนำไปใช้ในหน้า Dashboard
-            localStorage.setItem('lastPickupTime', time);
-            localStorage.setItem('pickupStatus', 'Scheduled');
+            // เปลี่ยนหน้าจอจากการกรอกฟอร์ม เป็นหน้าจอสถานะ
+            document.getElementById('bookingCard').style.display = 'none';
+            document.getElementById('statusCard').style.display = 'block';
+            
+            // แสดงข้อมูลที่กรอกลงในหน้าสถานะ
+            document.getElementById('displayAddress').innerText = address;
+            document.getElementById('displayTime').innerText = time;
 
-            // แสดงหน้าต่างแจ้งเตือนสำเร็จ
-            showToast(`นัดรับสำเร็จ! เจ้าหน้าที่จะเข้าไปในช่วง ${time}`, 'success');
-
-            // หน่วงเวลา 2.5 วินาทีเพื่อให้ผู้ใช้เห็นข้อความแจ้งเตือน ก่อนส่งกลับหน้าหลัก
-            setTimeout(() => {
-                location.href = 'dashboard.html?status=pickup_set';
-            }, 2500);
+            showToast('นัดหมายเจ้าหน้าที่เรียบร้อยแล้ว', 'success');
         }
 
         /**
-         * ฟังก์ชันแสดงข้อความแจ้งเตือน (Toast)
-         * @param {string} message - ข้อความที่ต้องการแสดง
-         * @param {string} type - ประเภทการแจ้งเตือน ('success' หรือ 'error')
+         * ฟังก์ชัน Preview รูปหลักฐาน (HCI: Immediate Response)
+         */
+        function previewProof(event) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                const output = document.getElementById('pickupProofImg');
+                output.src = reader.result;
+                output.style.display = 'block';
+                // เมื่อเลือกรูปแล้ว ให้ปุ่ม "เสร็จสิ้น" ปรากฏขึ้น
+                document.getElementById('btnFinish').style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        /**
+         * ฟังก์ชันแจ้งว่ารับพัสดุไปเรียบร้อยแล้ว
+         */
+        function completePickup() {
+            // เปลี่ยนสถานะเป็นสำเร็จ (HCI: System State Change)
+            const badge = document.getElementById('statusBadge');
+            badge.innerText = '✅ รับพัสดุสำเร็จแล้ว';
+            badge.className = 'status-badge status-success';
+
+            // ซ่อนปุ่มและตัวเลือกไฟล์ เพื่อไม่ให้แก้ไขข้อมูลซ้ำ (Error Prevention)
+            document.getElementById('btnFinish').style.display = 'none';
+            document.getElementById('proofInput').style.display = 'none';
+
+            showToast('บันทึกข้อมูลเรียบร้อย ขอบคุณที่ใช้บริการ', 'success');
+
+            // บันทึกสถานะลงระบบจำลอง
+            localStorage.setItem('pickupComplete', 'true');
+
+            // ส่งกลับหน้าหลักหลังจากผ่านไป 3 วินาที
+            setTimeout(() => {
+                location.href = 'dashboard.html?pickup=done';
+            }, 3000);
+        }
+
+        /**
+         * ฟังก์ชันแสดง Toast
          */
         function showToast(message, type) {
             const wrapper = document.getElementById('toast-wrapper');
             const toast = document.createElement('div');
             const icon = type === 'success' ? '✅' : '❌';
-            
-            // กำหนด Class และ Style ตามประเภทที่ส่งมา
             toast.className = `toast ${type}`;
-            toast.style.borderLeft = type === 'success' ? '5px solid #00c851' : '5px solid #ff4444';
             toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
-            
-            // เพิ่ม Toast เข้าไปใน Wrapper
             wrapper.appendChild(toast);
-            
-            // ตั้งเวลาให้ Toast ค่อยๆ จางหายและลบทิ้งหลังจากแสดงผล
             setTimeout(() => {
                 toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 500); // ลบ Element ออกจาก DOM
+                setTimeout(() => toast.remove(), 500);
             }, 2500);
         }
     </script>
